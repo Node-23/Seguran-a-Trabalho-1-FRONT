@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLOCK™</title>
     <link rel="stylesheet" href="mainUser.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="mainUser.js"></script>
 </head>
 <body>
     <div id="main">
         <div style="display: flex; align-items: center; gap: 20px;">
-            <h1 class="text-data">Bem vindo {USERNAME}</h1>
+            <h1 class="text-data">Bem vindo <strong id="username">{USERNAME}</strong></h1>
             <div class="tooltip">
                 <img width="25" height="25" src="https://img.icons8.com/ios/25/DFCFCF/add--v1.png" alt="add--v1"/>
                 <span class="tooltiptext">Criar chave</span>
@@ -38,37 +39,8 @@
                     <th>Ações</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="key-table">
                 <tr>
-                    <td>Data 1</td>
-                    <td>Data 2</td>
-                    <td>Data 3</td>
-                    <td>
-                        <div class="tooltip">
-                            <img width="25" height="25" src="https://img.icons8.com/ios/25/DFCFCF/import.png" alt="import"/>
-                            <span class="tooltiptext">Importar</span>
-                        </div>
-                        <div class="tooltip">
-                            <img width="25" height="25" src="https://img.icons8.com/ios/25/DFCFCF/export.png" alt="export"/>
-                            <span class="tooltiptext">Exportar</span>
-                        </div>
-                        <div class="tooltip">
-                            <img width="25" height="25" src="https://img.icons8.com/ios/25/DFCFCF/create-new.png" alt="create-new"/>
-                            <span class="tooltiptext">Editar</span>
-                        </div>
-                        <div class="tooltip">
-                            <img width="25" height="25" src="https://img.icons8.com/material-outlined/25/DFCFCF/lock--v1.png" onclick="openPopup()" alt="lock--v1"/>
-                            <span class="tooltiptext" style="width: 90px">Criptografar</span>
-                        </div>
-                        <div class="tooltip">
-                            <img width="25" height="25" src="https://img.icons8.com/material-outlined/25/DFCFCF/open-lock.png" onclick="openPopup()" alt="open-lock"/>
-                            <span class="tooltiptext" style="width: 110px">Descriptografar</span>
-                        </div>
-                        <div class="tooltip">
-                            <img width="25" height="25" src="https://img.icons8.com/ios/25/c21f1f/delete--v1.png" onclick="confirmDelete()" alt="delete--v1"/>
-                            <span class="tooltiptext">Deletar</span>
-                        </div>
-                    </td>
                 </tr>
                 </tbody>
             </table>
