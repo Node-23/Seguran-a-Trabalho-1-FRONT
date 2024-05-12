@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOCK™</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="home.js"></script>
+</head>
+<body>
+    <div id="main">
+        <div style="width: 40%; display: flex; align-items: center; justify-content: center;">
+            <img src="/logo.png" style="width: 500px; height: 500px" alt="logo da empresa">
+        </div>
+
+        <div style="display: flex; background-color: #BB8493; width: 60%; align-items: center; justify-content: center; flex-direction: column;">
+            <div style="width: 100%; text-align: center">
+                <h1 class="text-data" style="font-size: 45px; padding-left: 60px;">BEM VINDO</h1>
+                <h3 class="text-data" style="font-size: 20px; padding-left: 60px;">Insira seus dados de acesso abaixo</h3>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label class="text-data" for="username">Username</label>
+                    <input class="input-data" type="text" id="username" name="username" placeholder="Enter your username">
+                </div>
+
+                <div class="form-group">
+                    <label class="text-data" for="password">Password</label>
+                    <input style="margin-left: 17px" class="input-data" type="password" id="password" name="password" placeholder="Enter your password">
+                </div>
+                <div style="width: 100%; display: flex; justify-content: center; gap: 20px;">
+                    <button class="home-btn text-data">ENTRAR</button>
+                    <button class="home-btn text-data" onclick="register()">REGISTRE-SE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

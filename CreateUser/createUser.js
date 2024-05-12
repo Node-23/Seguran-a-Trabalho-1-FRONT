@@ -1,0 +1,54 @@
+function RegisterUser(){
+    const name = $('#name').val();
+    const username = $('#username').val();
+    const email = $('#email').val();
+    const password = $('#password').val();
+    const confirmPassword = $('#confirm-password').val();
+    if(name.trim().length === 0 || username.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 || confirmPassword.trim().length === 0){
+        alert("Preencha todos os campos!");
+        return;
+    }
+    if(password !== confirmPassword){
+        alert("Senhas não são iguais!");
+        return;
+    }
+
+    const user = {
+        name: name,
+        username: username,
+        email: email,
+        password: password,
+    };
+
+    const url = 'http://localhost:8080/users';
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    };
+
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Dados enviados com sucesso:', data);
+            alert('Usuário ' + data.username + ' criado com sucesso!');
+            window.location.href = "../Home/home.html";
+        })
+        .catch(error => {
+            console.error('Erro:', error.message);
+            alert(error.message);
+    });
+}
+
+function cancel(){
+    window.location.href = "../Home/home.html";
+}
