@@ -121,10 +121,23 @@ td{
     cursor: pointer;
 }
 
+/*.input-data {*/
+/*    border-radius: 4px;*/
+/*    border: none;*/
+/*    font-size: 18px;*/
+/*    box-sizing: border-box;*/
+/*    outline: none;*/
+/*}*/
+
 .input-data {
+    width: 100%;
+    margin: 0;
     border-radius: 4px;
     border: none;
-    font-size: 18px;
+    background-color: #a57782;
+    color: #704264;
+    font-size: 21px;
+    padding-left: 10px;
     box-sizing: border-box;
     outline: none;
 }

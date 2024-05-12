@@ -18,10 +18,10 @@
             </div>
         </div>
         <div id="table-div">
-            <div id="myModal" class="modal">
+            <div id="message-catcher-popup" class="modal">
                 <div class="modal-content" style="display: flex; flex-direction: column; border-radius: 10px; background-color: #DBAFA0;">
                     <div style="display: flex; justify-content: flex-end">
-                        <span class="close" onclick="closePopup()">&times;</span>
+                        <span class="close" onclick="closePopup('message-catcher-popup')">&times;</span>
                     </div>
                     <label class="text-data" style="margin-bottom: 15px; font-size: 21px" for="messageInput">Insira a mensagem:</label>
                     <textarea class="text-data input-data" style="resize: none; margin-bottom: 15px; background-color: #DBAFA0;" id="messageInput" placeholder="Digite sua mensagem aqui..." rows="4" cols="50"></textarea>
@@ -30,6 +30,36 @@
                     </div>
                 </div>
             </div>
+
+            <div id="choice-popup" class="modal">
+                <p id="id-holder" style="display: none"></p>
+                <p id="key-name-holder" style="display: none"></p>
+                <div class="modal-content" style="display: flex; flex-direction: column; border-radius: 10px; background-color: #DBAFA0; width: 350px; height: 380px;">
+                    <div style="display: flex; justify-content: flex-end">
+                        <span class="close" onclick="closePopup('choice-popup')">&times;</span>
+                    </div>
+                    <label id="choice-label" class="text-data" for="choice-selector" style="font-size: 21px; ">Selecione o que deseja importar/exportar</label>
+                    <select id="choice-selector" onchange="togglePrivateFileInput(this)" style="display: block; height: 50px; font-size: 20px; margin-bottom: 15px; margin-top: 15px;">
+                        <option value="pair">Duas chaves</option>
+                        <option value="public">Apenas a pública</option>
+                    </select>
+
+                    <input class="input-data" type="password" id="password" name="password" placeholder="Insira a senha da chave" style="margin-bottom: 15px; height: 30px;">
+
+                    <div id="key-files-holder" style="display: none; justify-content: flex-end; flex-direction: column; gap: 20px; margin-bottom: 20px;">
+                        <label class="text-data" for="private-key" id="private-key-label">Selecione uma chave privada</label>
+                        <input type="file" id="private-key">
+
+                        <label class="text-data" for="private-key" id="public-key-label">Selecione uma chave pública</label>
+                        <input type="file" id="public-key">
+                    </div>
+                    <div style="display: flex; justify-content: flex-end">
+                        <button id="import-choice-button" class="home-btn text-data" style="width: 120px; height: 40px; color: papayawhip; font-size: 21px;" onclick="importKey()">Importar</button>
+                        <button id="export-choice-button" class="home-btn text-data" style="width: 120px; height: 40px; color: papayawhip; font-size: 21px;" onclick="exportKey()">Exportar</button>
+                    </div>
+                </div>
+            </div>
+
             <table>
                 <thead>
                 <tr>
