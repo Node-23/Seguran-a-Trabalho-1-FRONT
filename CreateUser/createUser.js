@@ -19,8 +19,8 @@ function RegisterUser(){
         email: email,
         password: password,
     };
-
-    const url = 'http://localhost:8080/users';
+    const host = 'http://localhost:8080';
+    const url = host+'/users';
     const options = {
         method: 'POST',
         headers: {
@@ -39,7 +39,6 @@ function RegisterUser(){
             return response.json();
         })
         .then(data => {
-            console.log('Dados enviados com sucesso:', data);
             alert('Usuário ' + data.username + ' criado com sucesso!');
             window.location.href = "../Home/home.html";
         })
