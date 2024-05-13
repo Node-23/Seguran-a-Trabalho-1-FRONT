@@ -11,6 +11,9 @@
 <body>
     <div id="overlay" style="display: none"></div>
     <div id="main">
+        <p id="id-holder" style="display: none"></p>
+        <p id="key-name-holder" style="display: none"></p>
+
         <div style="display: flex; align-items: center; gap: 20px;">
             <h1 class="text-data">Bem vindo <strong id="username">{USERNAME}</strong></h1>
             <div class="tooltip">
@@ -33,8 +36,6 @@
             </div>
 
             <div id="choice-popup" class="modal">
-                <p id="id-holder" style="display: none"></p>
-                <p id="key-name-holder" style="display: none"></p>
                 <div class="modal-content" style="display: flex; flex-direction: column; border-radius: 10px; background-color: #DBAFA0; width: 350px; height: 380px;">
                     <div style="display: flex; justify-content: flex-end">
                         <span class="close" onclick="closePopup('choice-popup')">&times;</span>
@@ -77,6 +78,21 @@
                 </div>
             </div>
 
+            <div id="edit-key-popup" class="modal">
+                <div class="modal-content" style="display: flex; flex-direction: column; border-radius: 10px; background-color: #DBAFA0; width: 350px; height: 280px; text-align: center">
+                    <div style="display: flex; justify-content: flex-end">
+                        <span class="close" onclick="closePopup('edit-key-popup')">&times;</span>
+                    </div>
+                    <h2 class="text-data" style="margin-top: 0;"> Editar chaves </h2>
+                    <input class="input-data" type="text" id="edit-name" name="edit-name" placeholder="Insira o novo nome da chave" style="margin-bottom: 15px; height: 30px;">
+                    <input class="input-data" type="password" id="edit-password" name="edit-password" placeholder="Insira a nova senha da chave" style="margin-bottom: 15px; height: 30px;">
+                    <input class="input-data" type="password" id="edit-confirm-password" name="edit-confirm-password" placeholder="Confirme a nova senha da chave" style="margin-bottom: 15px; height: 30px;">
+
+                    <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 15px;">
+                        <button id="edit-choice-button" class="home-btn text-data" style="width: 120px; height: 40px; color: papayawhip; font-size: 21px;" onclick="editPair()">EDITAR</button>
+                    </div>
+                </div>
+            </div>
             <table>
                 <thead>
                 <tr>

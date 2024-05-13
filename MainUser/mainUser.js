@@ -1,6 +1,7 @@
 
 let loggedUser;
 const host = 'http://localhost:8080';
+let overlay;
 function User(id, name, username, email, keys) {
     this.id = id;
     this.name = name;
@@ -16,8 +17,7 @@ function confirmDelete(keyId) {
 }
 
 function deleteKeys(keyId){
-    const overlay = $('#overlay');
-    $('#overlay').css('display', 'block');
+    overlay.css('display', 'block');
     const url = host + "/keys/" + keyId;
     fetch(url, {
         method: 'DELETE'
@@ -70,7 +70,8 @@ function sendMessage() {
 }
 
 $(function (){
-    $('#overlay').click(function(event) {
+    overlay = $('#overlay');
+    overlay.click(function(event) {
         event.preventDefault();
         event.stopPropagation();
     });
@@ -139,23 +140,23 @@ function formatarHorario(dataString) {
 function createKeyOptions(key){
     return "<td>\n" +
         "<div class=\"tooltip\">\n" +
-        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/ios/25/DFCFCF/import.png\" onclick=\"openImportPopup("+key.id+",'" + key.name + "')\" alt=\"import\"/>\n" +
+        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/ios/25/DFCFCF/import.png\" onclick=\"openImportPopup("+key.id+",'" + key.name + "')\" alt=\"Import\"/>\n" +
         "<span class=\"tooltiptext\">Importar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
-        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/ios/25/DFCFCF/export.png\" onclick=\"openExportPopup("+key.id+")\" alt=\"export\"/>\n" +
+        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/ios/25/DFCFCF/export.png\" onclick=\"openExportPopup("+key.id+")\" alt=\"Export\"/>\n" +
         "<span class=\"tooltiptext\">Exportar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
-        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/ios/25/DFCFCF/create-new.png\" alt=\"create-new\"/>\n" +
+        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/ios/25/DFCFCF/create-new.png\" onclick=\"prepareEditPopup("+key.id+",'"+key.name+"')\" alt=\"Editar\"/>\n" +
         "<span class=\"tooltiptext\">Editar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
-        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/lock--v1.png\" onclick=\"openPopup('message-catcher-popup')\" alt=\"lock--v1\"/>\n" +
+        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/lock--v1.png\" onclick=\"openPopup('message-catcher-popup')\" alt=\"Criptografar\"/>\n" +
         "<span class=\"tooltiptext\" style=\"width: 90px\">Criptografar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
-        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/open-lock.png\" onclick=\"openPopup('message-catcher-popup')\" alt=\"open-lock\"/>\n" +
+        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/open-lock.png\" onclick=\"openPopup('message-catcher-popup')\" alt=\"Descriptografar\"/>\n" +
         "<span class=\"tooltiptext\" style=\"width: 110px\">Descriptografar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
@@ -166,7 +167,6 @@ function createKeyOptions(key){
 }
 
 function createPair(){
-    const overlay = $('#overlay');
     overlay.css('display', 'block');
     const password = $('#create-password').val();
     const confirmPassword = $('#create-confirm-password').val();
@@ -207,6 +207,57 @@ function createPair(){
             console.error('Erro:', error.message);
             alert(error.message);
     }).finally(() => {
+        overlay.css('display', 'none');
+    });
+}
+
+function prepareEditPopup(keyId, keyName) {
+    $('#id-holder').text(keyId)
+    $('#edit-name').val(keyName);
+    openPopup('edit-key-popup')
+}
+
+function editPair() {
+    overlay.css('display', 'block');
+    const password = $('#edit-password').val();
+    const confirmPassword = $('#edit-confirm-password').val();
+    if(password !== confirmPassword){
+        alert("As senhas precisam ser iguais!");
+        return;
+    }
+    const dados = {
+        id: $('#id-holder').text(),
+        name: $('#edit-name').val(),
+        password: password
+    };
+
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+    };
+
+    const url = host + "/keys/"+ loggedUser.id;
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("Chaves editada com sucesso!");
+            closePopup('create-key-popup');
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Erro:', error.message);
+            alert(error.message);
+        }).finally(() => {
         overlay.css('display', 'none');
     });
 }

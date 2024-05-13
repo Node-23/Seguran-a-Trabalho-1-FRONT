@@ -135,7 +135,7 @@ td{
 }
 
 .input-data::placeholder {
-    color: #704264;
+    color: rgba(112, 66, 100, 0.4);
 }
 
 #overlay {
