@@ -19,7 +19,7 @@ function RegisterUser(){
         email: email,
         password: password,
     };
-    const host = 'http://localhost:8080';
+    const host = 'http://3.142.149.145:8080';
     const url = host+'/users';
     const options = {
         method: 'POST',
@@ -31,6 +31,7 @@ function RegisterUser(){
 
     fetch(url, options)
         .then(response => {
+            debugger
             if (!response.ok) {
                 return response.json().then(errorData => {
                     throw new Error(errorData.message);
@@ -39,10 +40,12 @@ function RegisterUser(){
             return response.json();
         })
         .then(data => {
+            debugger
             alert('Usuário ' + data.username + ' criado com sucesso!');
             window.location.href = "../Home/home.html";
         })
         .catch(error => {
+            debugger
             console.error('Erro:', error.message);
             alert(error.message);
     });

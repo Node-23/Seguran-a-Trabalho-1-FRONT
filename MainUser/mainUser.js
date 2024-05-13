@@ -1,6 +1,6 @@
 
 let loggedUser;
-const host = 'http://localhost:8080';
+const host = 'http://3.142.149.145:8080';
 let overlay;
 function User(id, name, username, email, keys) {
     this.id = id;

@@ -14,7 +14,7 @@ function Login(){
         email: email,
         password: password,
     };
-    const host = 'http://localhost:8080';
+    const host = 'http://3.142.149.145:8080';
     const url = host+'/users/login';
     const options = {
         method: 'POST',
