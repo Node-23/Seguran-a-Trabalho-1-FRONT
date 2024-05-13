@@ -35,7 +35,6 @@ function Login(){
         })
         .then(data => {
             alert('Bem vindo ' + data.username + '!');
-            debugger
             window.location.href = "../MainUser/mainUser.html?" + data.id;
         })
         .catch(error => {

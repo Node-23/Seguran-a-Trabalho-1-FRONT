@@ -1,7 +1,8 @@
 
-let user;
+let loggedUser;
 const host = 'http://localhost:8080';
-function User(name, username, email, keys) {
+function User(id, name, username, email, keys) {
+    this.id = id;
     this.name = name;
     this.username = username;
     this.email = email;
@@ -15,8 +16,10 @@ function confirmDelete(keyId) {
 }
 
 function deleteKeys(keyId){
+    const overlay = $('#overlay');
+    $('#overlay').css('display', 'block');
     const url = host + "/keys/" + keyId;
-    return fetch(url, {
+    fetch(url, {
         method: 'DELETE'
     })
         .then(response => {
@@ -34,13 +37,16 @@ function deleteKeys(keyId){
             if (Object.keys(data).length === 0) {
                 alert('Recurso excluído com sucesso!');
             } else {
-                alert('Recurso excluído com sucesso: ' + data);
+                alert('Info: ' + data);
             }
+            window.location.reload();
         })
         .catch(error => {
             alert('Erro ao excluir o recurso: ' + error.message);
             throw error;
-        });
+        }).finally(() => {
+        overlay.css('display', 'none');
+    });
 }
 
 function openPopup(popupId) {
@@ -64,6 +70,11 @@ function sendMessage() {
 }
 
 $(function (){
+    $('#overlay').click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
     const urlAtual = window.location.href;
     const indexOfSeparator = urlAtual.indexOf('?');
     if(indexOfSeparator === -1){
@@ -72,7 +83,7 @@ $(function (){
         return;
     }
 
-    const url = host+'/users/'+urlAtual[indexOfSeparator + 1];
+    const url = host+'/users/'+urlAtual.split('?')[1];
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -83,8 +94,8 @@ $(function (){
             return response.json();
         })
         .then(data => {
-            user = new User(data.name, data.username, data.email, data.keys);
-            setUserData(user);
+            loggedUser = new User(data.id, data.name, data.username, data.email, data.keys);
+            setUserData(loggedUser);
         })
         .catch(error => {
             console.error('Erro:', error.message);
@@ -152,6 +163,52 @@ function createKeyOptions(key){
         "<span class=\"tooltiptext\">Deletar</span>\n" +
         "</div>\n" +
         "</td>";
+}
+
+function createPair(){
+    const overlay = $('#overlay');
+    overlay.css('display', 'block');
+    const password = $('#create-password').val();
+    const confirmPassword = $('#create-confirm-password').val();
+    if(password !== confirmPassword){
+        alert("As senhas precisam ser iguais!");
+        return;
+    }
+    const dados = {
+        ownerId: loggedUser.id,
+        name: $('#create-name').val(),
+        password: password
+    };
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+    };
+
+    const url = host + "/keys";
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("Chaves criadas com sucesso!");
+            closePopup('create-key-popup');
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Erro:', error.message);
+            alert(error.message);
+    }).finally(() => {
+        overlay.css('display', 'none');
+    });
 }
 
 function openImportPopup(keyId, keyName){
@@ -281,7 +338,7 @@ function exportKey() {
             if (contentType && contentType.includes('application/json')) {
                 return response.json();
             } else {
-                return {}; // Retorna um objeto vazio se a resposta não for JSON
+                return {};
             }
         })
         .then(data => {
