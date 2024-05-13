@@ -28,9 +28,11 @@
                         <span class="close" onclick="closePopup('message-catcher-popup')">&times;</span>
                     </div>
                     <label class="text-data" style="margin-bottom: 15px; font-size: 21px" for="messageInput">Insira a mensagem:</label>
-                    <textarea class="text-data input-data" style="resize: none; margin-bottom: 15px; background-color: #DBAFA0;" id="messageInput" placeholder="Digite sua mensagem aqui..." rows="4" cols="50"></textarea>
-                    <div style="display: flex; justify-content: flex-end">
-                        <button class="home-btn text-data" style="width: 120px; height: 40px; color: papayawhip; font-size: 21px;" onclick="sendMessage()">Enviar</button>
+                    <textarea id="messageInput" class="text-data input-data" style="resize: none; margin-bottom: 15px; background-color: #DBAFA0;" placeholder="Digite sua mensagem aqui..." rows="4" cols="50"></textarea>
+                    <div style="display: flex; justify-content: flex-end; gap: 15px; align-items: baseline">
+                        <input class="input-data" type="password" id="key-password" name="key-password" placeholder="Insira a senha da chave" style="margin-bottom: 15px; height: 30px; width: 300px;">
+                        <button id="encrypt-btn" class="home-btn text-data" style="width: 120px; height: 40px; color: papayawhip; font-size: 21px;" onclick="encryptMessage()">Encriptar</button>
+                        <button id="decrypt-btn" class="home-btn text-data" style="width: 120px; height: 40px; color: papayawhip; font-size: 21px;" onclick="decryptMessage()">Decriptar</button>
                     </div>
                 </div>
             </div>

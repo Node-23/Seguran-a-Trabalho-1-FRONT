@@ -49,7 +49,8 @@ function deleteKeys(keyId){
     });
 }
 
-function openPopup(popupId) {
+function openPopup(popupId, keyId) {
+    $('#id-holder').text(keyId);
     document.getElementById(popupId).style.display = "block";
 }
 
@@ -63,12 +64,120 @@ window.onclick = function(event) {
     }
 }
 
-function sendMessage() {
-    const message = document.getElementById('messageInput').value;
-    alert("Mensagem enviada: " + message);
-    closePopup();
+
+function openEncryptPopup(popupId, keyId){
+    $('#encrypt-btn').css('display', 'block');
+    $('#decrypt-btn').css('display', 'none');
+    openPopup(popupId, keyId);
 }
 
+function encryptMessage(){
+    overlay.css('display', 'block');
+    const $password = $('#key-password');
+    const $message = $('#messageInput');
+    const dados = {
+        keyId: $('#id-holder').text(),
+        message: $message.val(),
+        password: $password.val()
+    };
+
+    $password.val("");
+    $message.val("");
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+    };
+
+    const url = host + "/keys/encrypt";
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorData => {
+                    throw new Error(errorData);
+                });
+            }
+            return response.text();
+        })
+        .then(data => {
+            const blob = new Blob([data], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mensagem_criptografada.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            closePopup('message-catcher-popup');
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Erro:', error.message);
+            alert(error.message);
+        }).finally(() => {
+        overlay.css('display', 'none');
+    });
+}
+
+function openDecryptPopup(popupId, keyId){
+    $('#encrypt-btn').css('display', 'none');
+    $('#decrypt-btn').css('display', 'block');
+    openPopup(popupId, keyId);
+}
+
+function decryptMessage(){
+    overlay.css('display', 'block');
+    const $password = $('#key-password');
+    const $message = $('#messageInput');
+    const dados = {
+        keyId: $('#id-holder').text(),
+        message: $message.val(),
+        password: $password.val()
+    };
+
+    $password.val("");
+    $message.val("");
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+    };
+
+    const url = host + "/keys/decrypt";
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorData => {
+                    throw new Error(errorData);
+                });
+            }
+            return response.text();
+        })
+        .then(data => {
+            const blob = new Blob([data], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mensagem_descriptografada.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            closePopup('message-catcher-popup');
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Erro:', error.message);
+            alert(error.message);
+        }).finally(() => {
+        overlay.css('display', 'none');
+    });
+}
 $(function (){
     overlay = $('#overlay');
     overlay.click(function(event) {
@@ -152,11 +261,11 @@ function createKeyOptions(key){
         "<span class=\"tooltiptext\">Editar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
-        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/lock--v1.png\" onclick=\"openPopup('message-catcher-popup')\" alt=\"Criptografar\"/>\n" +
+        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/lock--v1.png\" onclick=\"openEncryptPopup('message-catcher-popup', "+key.id+")\" alt=\"Criptografar\"/>\n" +
         "<span class=\"tooltiptext\" style=\"width: 90px\">Criptografar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
-        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/open-lock.png\" onclick=\"openPopup('message-catcher-popup')\" alt=\"Descriptografar\"/>\n" +
+        "<img width=\"25\" height=\"25\" src=\"https://img.icons8.com/material-outlined/25/DFCFCF/open-lock.png\" onclick=\"openDecryptPopup('message-catcher-popup', "+key.id+")\" alt=\"Descriptografar\"/>\n" +
         "<span class=\"tooltiptext\" style=\"width: 110px\">Descriptografar</span>\n" +
         "</div>\n" +
         "<div class=\"tooltip\">\n" +
@@ -251,7 +360,7 @@ function editPair() {
         })
         .then(data => {
             alert("Chaves editada com sucesso!");
-            closePopup('create-key-popup');
+            closePopup('edit-key-popup');
             window.location.reload();
         })
         .catch(error => {
@@ -267,12 +376,12 @@ function openImportPopup(keyId, keyName){
     $('#import-choice-button').css('display', 'block');
     $('#export-choice-button').css('display', 'none');
     $('#key-files-holder').css('display', 'none');
-    $('#id-holder').text(keyId);
     $('#key-name-holder').text(keyName);
-    openPopup("choice-popup");
+    openPopup("choice-popup", keyId);
 }
 
 function importKey(){
+    overlay.css('display', 'block');
     const keyId = $('#id-holder').text();
     const $password = $('#password');
     const password = $password.val();
@@ -314,6 +423,8 @@ function importKey(){
         })
         .catch(error => {
             alert(error.message);
+    }).finally(() => {
+        overlay.css('display', 'none');
     });
 }
 
@@ -322,11 +433,11 @@ function openExportPopup(keyId){
     $('#import-choice-button').css('display', 'none');
     $('#export-choice-button').css('display', 'block');
     $('#key-files-holder').css('display', 'flex');
-    $('#id-holder').text(keyId);
-    openPopup("choice-popup");
+    openPopup("choice-popup",keyId);
 }
 
 function exportKey() {
+    overlay.css('display', 'block');
     const formData = new FormData();
     const keyId = $('#id-holder').text();
     const $password = $('#password');
@@ -400,6 +511,8 @@ function exportKey() {
         .catch(error => {
             console.error('Erro:', error.message);
             alert(error.message);
+    }).finally(() => {
+        overlay.css('display', 'none');
     });
 }
 
@@ -424,4 +537,3 @@ function hidePrivateFileInput(){
     $('#private-key').css('display', 'none');
     $('#private-key-label').css('display', 'none');
 }
-
