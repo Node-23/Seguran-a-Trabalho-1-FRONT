@@ -23,7 +23,6 @@ function Login(){
         },
         body: JSON.stringify(login)
     };
-
     fetch(url, options)
         .then(response => {
             if (!response.ok) {
